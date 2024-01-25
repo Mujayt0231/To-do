@@ -8,14 +8,13 @@ import { TaskList } from "./components/TaskList";
 function App() {
 
   const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   //console.log(tasks);
 
 
   useEffect(() => {
-
     const tasksFromLocalStorage = JSON.parse(window.localStorage.getItem("react-todo-list-tasks"));
-
 
     if (!!tasksFromLocalStorage) {
       setTasks(tasksFromLocalStorage);
@@ -28,7 +27,6 @@ function App() {
   }
 
   const addTask = (task) => {
-
     const updatedTasks = [...tasks, task];
     updateTasks(updatedTasks);
   }
@@ -38,12 +36,42 @@ function App() {
     updateTasks(updatedTasks);
   }
 
+  //V1
+  // const updateTask = (updatedTask) => {
+
+  //   const updatedTasks = tasks.map((task) => {
+  //     if (task.taskId === updatedTask.taskId) {
+  //       return updatedTask;
+  //     }
+  //     return task;
+  //   });
+  //   updateTasks(updatedTasks);
+  // }
+
+  //V2
+  const toggleTask = (taskId) => {
+    const updatedTasks = tasks.map((task) => {
+      if (task.taskId === taskId) {
+        return {
+          ...task, isCompleted: !task.isCompleted,
+        };
+      }
+      return task;
+    });
+    updateTasks(updatedTasks);
+  };
+
+  const clearCompletedTasks = () => {
+    const uncompletedTasks = tasks.filter((task) => !task.isCompleted);
+    updateTasks(uncompletedTasks)
+  }
+
   return (
     <div id="main-container">
       <TaskInput addTask={addTask} />
-      <TaskList tasks={tasks} deleteTask={deleteTask} />
-      <Filters />
-      <ClearTask />
+      <TaskList tasks={tasks} deleteTask={deleteTask} toggleTask={toggleTask} filter={filter} />
+      <Filters filter={filter} setFilter={setFilter} />
+      <ClearTask clearTasks={clearCompletedTasks} />
     </div>
   );
 }

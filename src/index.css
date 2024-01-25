@@ -24,3 +24,8 @@ body {
 .pointer {
   cursor: pointer;
 }
+
+.completed {
+  text-decoration: line-through;
+  color: lightgray;
+}

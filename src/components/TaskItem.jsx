@@ -1,7 +1,13 @@
-const TaskItem = ({ label, taskId, deleteTask }) => {
+const TaskItem = ({ task, deleteTask, toggleTask }) => {
+
+  const { label, taskId, isCompleted } = task;
 
   const handleDelete = () => {
     deleteTask(taskId);
+  }
+
+  const handleChange = () => {
+    toggleTask(taskId);
   }
 
   return (
@@ -11,8 +17,11 @@ const TaskItem = ({ label, taskId, deleteTask }) => {
           className="form-check-input me-1"
           type="checkbox"
           id={taskId}
+          checked={isCompleted}
+          onChange={handleChange}
         ></input>
-        <label className="form-check-label" htmlFor={taskId}>
+        <label className={`form-check-label ${isCompleted ? "completed" : ""}`}
+          htmlFor={taskId}>
           {label}
         </label>
       </div>
